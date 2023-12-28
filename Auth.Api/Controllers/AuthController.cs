@@ -16,7 +16,7 @@ namespace Auth.Api.Controllers
             _authService = authService;
         }
         [HttpPost("logout")]
-        [Authorize] // Sadece oturum açmış kullanıcılar için
+        [Authorize(Roles ="Anketor")] // Sadece oturum açmış kullanıcılar için
         public async Task<IActionResult> Logout()
         {
             await _authService.Logout(); // Oturumu kapat

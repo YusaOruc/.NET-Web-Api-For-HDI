@@ -1,11 +1,12 @@
-﻿using HDIWebApi.Interfaces;
+﻿using Auth.Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace HDIWebApi.Service
+namespace Auth.Core.Services
 {
     public class AuthService: IAuthService
     {
@@ -93,7 +94,7 @@ namespace HDIWebApi.Service
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
-            SecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("Jwt:Key").Value));
+            SecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("Jwt:Key").Value!));
 
             var signingCred = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 

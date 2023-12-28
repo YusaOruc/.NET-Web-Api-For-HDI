@@ -1,11 +1,11 @@
-﻿using HDIWebApi.Interfaces;
+﻿using Auth.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HDIWebApi.Controllers
+namespace Auth.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/authModule/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {

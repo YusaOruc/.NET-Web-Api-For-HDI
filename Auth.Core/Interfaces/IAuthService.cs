@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace HDIWebApi.Interfaces
+namespace Auth.Core.Interfaces
 {
     public interface IAuthService
     {

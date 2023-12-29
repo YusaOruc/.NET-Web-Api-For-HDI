@@ -1,4 +1,5 @@
-﻿using Auth.Core.Interfaces;
+﻿using Auth.Core.Dtos;
+using Auth.Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace Auth.Core.Services
 {
-    public class AuthService: IAuthService
+    public class AuthService : IAuthService
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -57,18 +58,30 @@ namespace Auth.Core.Services
             return result;
         }
 
-        public async Task<SignInResult> LoginUser(string username, string password)
+        public async Task<LoginResultDto> LoginUser(string username, string password)
         {
             var user = await _userManager.FindByEmailAsync(username);
 
+            var obj = new LoginResultDto();
             if (user != null)
             {
                 var result = await _signInManager.PasswordSignInAsync(user, password, false, lockoutOnFailure: false);
 
-                return result;
+                // Giriş başarılı ise kullanıcının adını ve rolünü döndür.
+                var roles = await _userManager.GetRolesAsync(user);
+                var roleName = roles.FirstOrDefault();
+                var token = GenerateTokenString(username, password);
+
+                obj.Role = roleName ?? "";
+                obj.Token = token;
+                obj.SignInResult = result;
+
+                return obj;
             }
 
-            return SignInResult.Failed;
+            obj.SignInResult = SignInResult.Failed;
+
+            return obj;
         }
 
         public string GenerateTokenString(string username, string password)

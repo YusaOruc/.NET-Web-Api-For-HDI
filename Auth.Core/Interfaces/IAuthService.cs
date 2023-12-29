@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Auth.Core.Dtos;
+using Microsoft.AspNetCore.Identity;
 
 namespace Auth.Core.Interfaces
 {
@@ -10,7 +11,7 @@ namespace Auth.Core.Interfaces
         /// <returns></returns>
         Task<bool> Logout();
         Task<IdentityResult> RegisterUser(string username, string password);
-        Task<SignInResult> LoginUser(string username, string password);
+        Task<LoginResultDto> LoginUser(string username, string password);
         string GenerateTokenString(string username, string password);
     }
 }

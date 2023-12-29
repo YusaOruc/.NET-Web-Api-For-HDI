@@ -1,4 +1,5 @@
-﻿using Auth.Core.Interfaces;
+﻿using Auth.Core.Dtos;
+using Auth.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,26 +17,25 @@ namespace Auth.Api.Controllers
             _authService = authService;
         }
         [HttpPost("logout")]
-        [Authorize(Roles ="Anketor")] // Sadece oturum açmış kullanıcılar için
+        [Authorize] // Sadece oturum açmış kullanıcılar için
         public async Task<IActionResult> Logout()
         {
             await _authService.Logout(); // Oturumu kapat
 
             return Ok(new { Message = "Logout successful." });
         }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(string username, string password)
+        [HttpPost("test")]
+        [Authorize] // Sadece oturum açmış kullanıcılar için
+        public async Task<string> Test()
         {
-            var result = await _authService.LoginUser(username, password);
-
-            if (result.Succeeded)
-            {
-                var tokenString = _authService.GenerateTokenString(username, password);
-                return Ok(new { Message = tokenString });
-            }
-
-            return Unauthorized(new { Message = "Invalid login attempt." });
+            var a = "Test";
+            return a;
+        }
+        [HttpPost("login")]
+        public async Task<LoginResultDto> Login(string username, string password)
+        {
+            var obj = await _authService.LoginUser(username, password);
+            return obj;
         }
 
         [HttpPost("register")]

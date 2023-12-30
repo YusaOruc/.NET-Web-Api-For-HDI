@@ -6,6 +6,7 @@ using Data.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Survey.Core.Dtos.Survey;
 using Survey.Core.Interfaces;
 using System;
@@ -115,6 +116,24 @@ namespace Survey.Core.Services
                     option.Updater = userId;
                 }
             }
+            //Silinmiş sorular bul. Soruları ve cevaplarıı veritabanından sil.
+
+            var deletedOptions = new List<SurveyQuestionOption>();
+            foreach (var question in obj.SurveyQuestions)
+            {
+                var options = await _context.SurveyQuestionOptions.AsTracking().Where(t => !question.SurveyQuestionOptions.Contains(t) && t.SurveyQuestionId == question.Id).ToListAsync();
+                deletedOptions.AddRange(options);
+            }
+
+            var deletedQuestions = await _context.SurveyQuestions.AsTracking().Where(t => !obj.SurveyQuestions.Contains(t) && t.SurveyBaseId == id).ToListAsync();
+
+            foreach (var question in deletedQuestions)
+            {
+                var options = await _context.SurveyQuestionOptions.Where(t => t.SurveyQuestionId == question.Id).ToListAsync();
+                deletedOptions.AddRange(options);
+            }
+            _context.SurveyQuestionOptions.RemoveRange(deletedOptions);
+            _context.SurveyQuestions.RemoveRange(deletedQuestions);
 
             await _context.SaveChangesAsync();
         }

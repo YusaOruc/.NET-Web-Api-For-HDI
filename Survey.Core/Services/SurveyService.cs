@@ -87,5 +87,36 @@ namespace Survey.Core.Services
 
             return result;
         }
+
+        public async Task Update(int id, SurveyUpdateDto dto)
+        {
+            var userId = await _sessionService.GetAuthenticatedUserIdAsync();
+            var obj = await _context.SurveyBases.AsTracking().Where(t => t.Id == id).FirstOrDefaultAsync();
+
+
+            var created = DateTime.UtcNow;
+            obj = _mapper.Map(dto, obj);
+
+            obj.LastUpdateDate = created;
+            obj.Updater = userId;
+
+            foreach (var question in obj.SurveyQuestions)
+            {
+                question.CreateDate = created;
+                question.LastUpdateDate = created;
+                question.Creator = userId;
+                question.Updater = userId;
+
+                foreach (var option in question.SurveyQuestionOptions)
+                {
+                    option.CreateDate = created;
+                    option.LastUpdateDate = created;
+                    option.Creator = userId;
+                    option.Updater = userId;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

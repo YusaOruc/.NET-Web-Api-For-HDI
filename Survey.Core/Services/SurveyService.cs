@@ -71,5 +71,21 @@ namespace Survey.Core.Services
 
             return obj;
         }
+
+        public async Task<IEnumerable<SurveySummaryListDto>> GetList()
+        {
+            var userId = await _sessionService.GetAuthenticatedUserIdAsync();
+
+
+            var result = await _context.SurveyBases.AsNoTracking()
+                .Include(t=>t.SurveyQuestions)
+                .Where(t => t.Creator == userId)
+                .Where(t => t.ParentId == null)
+                .ProjectTo<SurveySummaryListDto>(_mapper.ConfigurationProvider)
+                .OrderByDescending(t => t.CreateDate)
+                .ToListAsync();
+
+            return result;
+        }
     }
 }

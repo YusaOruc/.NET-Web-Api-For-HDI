@@ -22,5 +22,11 @@ namespace Survey.Core.Interfaces
         /// <param name="id">Anket Id</param>
         /// <returns></returns>
         Task<SurveyListDto> Get(int id);
+
+        /// <summary>
+        /// Anket Listeleme
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<SurveySummaryListDto>> GetList();
     }
 }

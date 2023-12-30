@@ -2,7 +2,7 @@
 
 namespace Data.Entity
 {
-    public class SurveyBase : BaseEntity
+    public partial class SurveyBase : BaseEntity
     {
         public int? ParentId { get; set; }
 

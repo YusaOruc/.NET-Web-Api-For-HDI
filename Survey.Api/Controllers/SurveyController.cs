@@ -59,5 +59,21 @@ namespace Survey.Api.Controllers
 
             return obj;
         }
+
+        /// <summary>
+        ///     Anket Listeleme
+        /// </summary>
+        /// <response code="200">Başarılı Listeleme</response>
+        /// <response code="400">Eksik olan Fieldlar</response>
+        [Authorize]
+        [HttpGet]
+        [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
+        [ProducesResponseType(typeof(IEnumerable<SurveySummaryListDto>), 200)]
+        public async Task<ActionResult<IEnumerable<SurveySummaryListDto>>> GetSurveys()
+        {
+            var obj = await _surveyService.GetList();
+
+            return Ok(obj);
+        }
     }
 }

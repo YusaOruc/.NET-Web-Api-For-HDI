@@ -1,10 +1,11 @@
 using Auth.Core.Extensions;
 using Auth.Api.Extensions;
-using HDIWebApi.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Survey.Api.Extensions;
+using Data.Core.DbContexts;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 
 
@@ -14,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<HdiDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings:DefaultConnection").Value);
+    options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings:DefaultConnection").Value, b => b.MigrationsAssembly("HDIWebApi"));
 });
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {

@@ -1,17 +1,22 @@
-﻿using Data.Entity;
+﻿using Data.Core.Entity;
+using Data.Entity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
-namespace HDIWebApi.Data
+namespace Data.Core.DbContexts
 {
     public class HdiDbContext : IdentityDbContext
     {
         public HdiDbContext(DbContextOptions<HdiDbContext> options) : base(options)
         {
+            
         }
         public DbSet<SurveyBase> SurveyBases { get; set; }
         public DbSet<SurveyQuestion> SurveyQuestions { get; set; }
         public DbSet<SurveyQuestionOption> SurveyQuestionOptions { get; set; }
+        public DbSet<SurveyResult> SurveyResult { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

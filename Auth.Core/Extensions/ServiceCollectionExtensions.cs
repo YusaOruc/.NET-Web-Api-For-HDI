@@ -14,6 +14,7 @@ namespace Auth.Core.Extensions
         public static void AddAuthServices(this IServiceCollection services)
         {
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ISessionService, SessionService>();
         }
     }
 }

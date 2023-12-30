@@ -15,5 +15,12 @@ namespace Survey.Core.Interfaces
         /// <param name="dto"></param>
         /// <returns></returns>
         Task Add(SurveyDto dto);
+
+        /// <summary>
+        /// Anket Detay
+        /// </summary>
+        /// <param name="id">Anket Id</param>
+        /// <returns></returns>
+        Task<SurveyListDto> Get(int id);
     }
 }

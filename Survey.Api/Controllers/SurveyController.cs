@@ -39,5 +39,25 @@ namespace Survey.Api.Controllers
 
             return NoContent();
         }
+
+        /// <summary>
+        ///     Anket
+        /// </summary>
+        /// <param name="id"></param>
+        /// <response code="200">Anket bilgileri</response>
+        [Authorize]
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(SurveyListDto), 200)]
+        public async Task<ActionResult<SurveyListDto>> GetSurvey([FromRoute] int id)
+        {
+            var obj = await _surveyService.Get(id);
+
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return obj;
+        }
     }
 }

@@ -15,6 +15,10 @@ namespace Survey.Core.MapperProfiles
 
             CreateMap<SurveyQuestionDto, SurveyQuestion>();
             CreateMap<SurveyQuestionOptionDto, SurveyQuestionOption>();
+
+            CreateMap<SurveyBase, SurveyListDto>();
+            CreateMap<SurveyQuestion, SurveyQuestionListDto>();
+            CreateMap<SurveyQuestionOption, SurveyQuestionOptionListDto>();
         }
     }
 }

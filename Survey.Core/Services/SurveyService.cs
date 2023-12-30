@@ -1,9 +1,11 @@
 ﻿using Auth.Core.Interfaces;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Data.Core.DbContexts;
 using Data.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using Survey.Core.Dtos.Survey;
 using Survey.Core.Interfaces;
 using System;
@@ -58,6 +60,16 @@ namespace Survey.Core.Services
 
             _context.SurveyBases.Add(obj);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<SurveyListDto> Get(int id)
+        {
+            var obj = await _context.SurveyBases.AsNoTracking()
+                .Where(e => e.Id == id)
+                .ProjectTo<SurveyListDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+
+            return obj;
         }
     }
 }

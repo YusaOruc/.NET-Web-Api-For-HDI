@@ -12,14 +12,14 @@ namespace Survey.Core.Dtos.Survey
 
         [Required]
         public string Title { get; set; }
-        public virtual ICollection<SurveyQuestionDto> SurveyQuestions { get; set; }
-        public virtual ICollection<SurveyPartDto> Parts { get; set; }
+        public virtual ICollection<SurveyQuestionDto>? SurveyQuestions { get; set; }
+        public virtual ICollection<SurveyPartDto>? Parts { get; set; }
     }
     public class SurveyPartDto
     {
 
         [Required]
         public string Title { get; set; }
-        public virtual ICollection<SurveyQuestionDto> SurveyQuestions { get; set; }
+        public virtual ICollection<SurveyQuestionDto>? SurveyQuestions { get; set; }
     }
 }

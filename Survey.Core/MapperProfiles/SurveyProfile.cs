@@ -20,6 +20,12 @@ namespace Survey.Core.MapperProfiles
             CreateMap<SurveyUpdateDto, SurveyBase>()
               .ForMember(source => source.SurveyQuestions,
                  operation => operation.MapFrom(dto => dto.SurveyQuestions));
+            CreateMap<SurveyPartUpdateDto, SurveyBase>();
+            CreateMap<SurveyPartUpdateDto, SurveyUpdateDto>();
+
+            CreateMap<SurveyQuestionUpdateDto, SurveyQuestionDto>().ReverseMap();
+            CreateMap<SurveyQuestionOptionUpdateDto, SurveyQuestionOptionDto>().ReverseMap();
+            CreateMap<SurveyPartUpdateDto, SurveyDto>();
 
             CreateMap<SurveyQuestionUpdateDto, SurveyQuestion>();
             CreateMap<SurveyQuestionOptionUpdateDto, SurveyQuestionOption>();

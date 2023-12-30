@@ -13,5 +13,13 @@ namespace Survey.Core.Dtos.Survey
         public int Id { get; set; }
         public string Title { get; set; }
         public virtual ICollection<SurveyQuestionUpdateDto> SurveyQuestions { get; set; }
+        public virtual ICollection<SurveyPartUpdateDto>? Parts { get; set; }
+    }
+    public class SurveyPartUpdateDto
+    {
+        [Required]
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public virtual ICollection<SurveyQuestionUpdateDto> SurveyQuestions { get; set; }
     }
 }

@@ -35,19 +35,31 @@ namespace Survey.Core.Services
             var obj = _mapper.Map<SurveyBase>(dto);
 
             obj = await AddInitial(obj);
-
-            foreach (var part in dto.Parts)
+            if (dto.Parts!=null)
             {
-                var partObj = _mapper.Map<SurveyBase>(part);
-                partObj.ParentId = obj.Id;
-                var result = await AddInitial(partObj);
+                foreach (var part in dto.Parts)
+                {
+                    var partObj = _mapper.Map<SurveyBase>(part);
+                    partObj.ParentId = obj.Id;
+                    var result = await AddInitial(partObj);
+                }
             }
-            
+           
+
+        }
+        public async Task AddPart(int parentId,SurveyDto dto)
+        {
+            var obj = _mapper.Map<SurveyBase>(dto);
+
+            obj = await AddInitial(obj);
+            obj.ParentId = parentId;
+            await _context.SaveChangesAsync();
+
         }
         public async Task<SurveyBase> AddInitial(SurveyBase obj)
         {
             var userId = await _sessionService.GetAuthenticatedUserIdAsync();
-            var created = DateTime.UtcNow;;
+            var created = DateTime.UtcNow; ;
 
             obj.CreateDate = created;
             obj.LastUpdateDate = created;
@@ -81,9 +93,9 @@ namespace Survey.Core.Services
                 .ProjectTo<SurveyListDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
 
-            obj.Parts= await _context.SurveyBases
+            obj.Parts = await _context.SurveyBases
                 .AsNoTracking()
-                .Where(t=>t.ParentId == id)
+                .Where(t => t.ParentId == id)
                 .ProjectTo<SurveyListDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
@@ -96,7 +108,7 @@ namespace Survey.Core.Services
 
 
             var result = await _context.SurveyBases.AsNoTracking()
-                .Include(t=>t.SurveyQuestions)
+                .Include(t => t.SurveyQuestions)
                 .Where(t => t.Creator == userId)
                 .Where(t => t.ParentId == null)
                 .ProjectTo<SurveySummaryListDto>(_mapper.ConfigurationProvider)
@@ -151,6 +163,94 @@ namespace Survey.Core.Services
             }
             _context.SurveyQuestionOptions.RemoveRange(deletedOptions);
             _context.SurveyQuestions.RemoveRange(deletedQuestions);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdatePart(int id, SurveyPartUpdateDto dto)
+        {
+            var userId = await _sessionService.GetAuthenticatedUserIdAsync();
+            var obj = await _context.SurveyBases.AsTracking().Where(t => t.Id == id).FirstOrDefaultAsync();
+
+
+            var created = DateTime.UtcNow;
+            obj = _mapper.Map(dto, obj);
+
+            obj.LastUpdateDate = created;
+            obj.Updater = userId;
+
+            foreach (var question in obj.SurveyQuestions)
+            {
+                question.CreateDate = created;
+                question.LastUpdateDate = created;
+                question.Creator = userId;
+                question.Updater = userId;
+
+                foreach (var option in question.SurveyQuestionOptions)
+                {
+                    option.CreateDate = created;
+                    option.LastUpdateDate = created;
+                    option.Creator = userId;
+                    option.Updater = userId;
+                }
+            }
+            //Silinmiş sorular bul. Soruları ve cevaplarıı veritabanından sil.
+
+            var deletedOptions = new List<SurveyQuestionOption>();
+            foreach (var question in obj.SurveyQuestions)
+            {
+                var options = await _context.SurveyQuestionOptions.AsTracking().Where(t => !question.SurveyQuestionOptions.Contains(t) && t.SurveyQuestionId == question.Id).ToListAsync();
+                deletedOptions.AddRange(options);
+            }
+
+            var deletedQuestions = await _context.SurveyQuestions.AsTracking().Where(t => !obj.SurveyQuestions.Contains(t) && t.SurveyBaseId == id).ToListAsync();
+
+            foreach (var question in deletedQuestions)
+            {
+                var options = await _context.SurveyQuestionOptions.Where(t => t.SurveyQuestionId == question.Id).ToListAsync();
+                deletedOptions.AddRange(options);
+            }
+            _context.SurveyQuestionOptions.RemoveRange(deletedOptions);
+            _context.SurveyQuestions.RemoveRange(deletedQuestions);
+
+            await _context.SaveChangesAsync();
+        }
+        public async Task RemoveParts(int id, List<int>? partIds)
+        {
+            var deletedParts = new List<SurveyBase>();
+            if (partIds==null)
+            {
+                deletedParts =await _context.SurveyBases.AsTracking().Where(t =>  t.ParentId == id).ToListAsync();
+            }
+            else
+            {
+                 deletedParts = await _context.SurveyBases.AsTracking().Where(t => !partIds.Contains(t.Id) && t.ParentId == id).ToListAsync();
+            }
+            
+
+            var qustions = new List<SurveyQuestion>();
+            foreach (var part in deletedParts)
+            {
+                part.ParentId = null;
+                var obj = await _context.SurveyQuestions.Where(t => t.SurveyBaseId == part.Id).FirstOrDefaultAsync();
+                if (obj != default)
+                {
+                    qustions.Add(obj);
+                }
+
+            }
+            var options = new List<SurveyQuestionOption>();
+            foreach (var qustionId in qustions.Select(t => t.Id))
+            {
+                var obj = await _context.SurveyQuestionOptions.Where(t => t.SurveyQuestionId == qustionId).FirstOrDefaultAsync();
+                if (obj != default)
+                {
+                    options.Add(obj);
+                }
+            }
+            _context.SurveyQuestionOptions.RemoveRange(options);
+            _context.SurveyQuestions.RemoveRange(qustions);
+            _context.SurveyBases.RemoveRange(deletedParts);
 
             await _context.SaveChangesAsync();
         }

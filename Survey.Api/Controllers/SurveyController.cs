@@ -1,4 +1,5 @@
 ﻿using Auth.Core.Interfaces;
+using AutoMapper;
 using Data.Core.DbContexts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,10 +21,12 @@ namespace Survey.Api.Controllers
     {
         private readonly ISurveyService _surveyService;
         private readonly HdiDbContext _context;
-        public SurveyController(ISurveyService surveyService, HdiDbContext context)
+        private readonly IMapper _mapper;
+        public SurveyController(ISurveyService surveyService, HdiDbContext context, IMapper mapper)
         {
             _surveyService = surveyService;
             _context = context;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -39,7 +42,7 @@ namespace Survey.Api.Controllers
         public async Task<ActionResult> PostSurvey([FromBody] SurveyDto dto)
         {
 
-             await _surveyService.Add(dto);
+            await _surveyService.Add(dto);
 
             return NoContent();
         }
@@ -102,7 +105,26 @@ namespace Survey.Api.Controllers
             {
                 return NotFound();
             }
-
+            if (dto.Parts != null && dto.Parts.Count > 0)
+            {
+                await _surveyService.RemoveParts(id, dto.Parts.Where(t => t.Id != 0).Select(t => t.Id).ToList());
+                foreach (var item in dto.Parts.Where(t => t.Id != 0))
+                {
+                    var obj = new SurveyUpdateDto();
+                    obj = _mapper.Map(item, obj);
+                    await _surveyService.Update(obj.Id, obj);
+                }
+                foreach (var item in dto.Parts.Where(t => t.Id == 0))
+                {
+                    var obj = new SurveyDto();
+                    obj = _mapper.Map(item, obj);
+                    await _surveyService.AddPart(id,obj);
+                }
+            }
+            else
+            {
+                await _surveyService.RemoveParts(id, null);
+            }
             await _surveyService.Update(id, dto);
 
             return NoContent();

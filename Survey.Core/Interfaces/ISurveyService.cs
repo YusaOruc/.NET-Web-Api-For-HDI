@@ -17,6 +17,13 @@ namespace Survey.Core.Interfaces
         Task Add(SurveyDto dto);
 
         /// <summary>
+        /// Anket Ekler parentı ile
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        Task AddPart(int parentId, SurveyDto dto);
+
+        /// <summary>
         /// Anket Detay
         /// </summary>
         /// <param name="id">Anket Id</param>
@@ -36,5 +43,21 @@ namespace Survey.Core.Interfaces
         /// <param name="dto"></param>
         /// <returns></returns>
         Task Update(int id, SurveyUpdateDto dto);
+
+        /// <summary>
+        /// Anket Güncelleme
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        Task UpdatePart(int id, SurveyPartUpdateDto dto);
+
+        /// <summary>
+        /// Anket partlarını siler
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        Task RemoveParts(int id, List<int>? partIds);
     }
 }

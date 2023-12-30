@@ -81,6 +81,12 @@ namespace Survey.Core.Services
                 .ProjectTo<SurveyListDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
 
+            obj.Parts= await _context.SurveyBases
+                .AsNoTracking()
+                .Where(t=>t.ParentId == id)
+                .ProjectTo<SurveyListDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
             return obj;
         }
 

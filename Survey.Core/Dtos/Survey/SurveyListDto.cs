@@ -14,6 +14,7 @@ namespace Survey.Core.Dtos.Survey
         public int? ParentId { get; set; }
         public string Title { get; set; }
         public virtual ICollection<SurveyQuestionListDto> SurveyQuestions { get; set; }
+        public virtual ICollection<SurveyListDto> Parts { get; set; }
 
         public string Creator { get; set; }
         public string Updater { get; set; }

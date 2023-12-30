@@ -32,11 +32,22 @@ namespace Survey.Core.Services
 
         public async Task Add(SurveyDto dto)
         {
-            var userId = await _sessionService.GetAuthenticatedUserIdAsync();
-
-            var created = DateTime.UtcNow;
-
             var obj = _mapper.Map<SurveyBase>(dto);
+
+            obj = await AddInitial(obj);
+
+            foreach (var part in dto.Parts)
+            {
+                var partObj = _mapper.Map<SurveyBase>(part);
+                partObj.ParentId = obj.Id;
+                var result = await AddInitial(partObj);
+            }
+            
+        }
+        public async Task<SurveyBase> AddInitial(SurveyBase obj)
+        {
+            var userId = await _sessionService.GetAuthenticatedUserIdAsync();
+            var created = DateTime.UtcNow;;
 
             obj.CreateDate = created;
             obj.LastUpdateDate = created;
@@ -61,8 +72,8 @@ namespace Survey.Core.Services
 
             _context.SurveyBases.Add(obj);
             await _context.SaveChangesAsync();
+            return obj;
         }
-
         public async Task<SurveyListDto> Get(int id)
         {
             var obj = await _context.SurveyBases.AsNoTracking()

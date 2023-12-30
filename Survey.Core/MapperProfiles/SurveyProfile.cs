@@ -9,6 +9,7 @@ namespace Survey.Core.MapperProfiles
         public SurveyProfile()
         {
 
+            CreateMap<SurveyPartDto, SurveyBase>();
             CreateMap<SurveyDto, SurveyBase>()
                 .ForMember(source => source.SurveyQuestions,
                    operation => operation.MapFrom(dto => dto.SurveyQuestions));

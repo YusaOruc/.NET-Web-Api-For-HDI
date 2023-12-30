@@ -4,11 +4,9 @@ using HDIWebApi.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using System.Text;
- 
+using Survey.Api.Extensions;
+
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +29,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddAuthModule(builder.Configuration);
+builder.Services.AddSurveyModule();
 builder.Services.AddControllers();
 
 

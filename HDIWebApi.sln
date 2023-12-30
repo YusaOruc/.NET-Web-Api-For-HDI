@@ -15,9 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auth.Core", "Auth.Core\Auth
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SurveyModule", "SurveyModule", "{6ADBBBD5-6F0E-4883-AAD3-C903F67E6BF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Survey.Api", "Survey.Api\Survey.Api.csproj", "{19D9EE07-378B-41C0-BC23-A845EC847AEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Survey.Api", "Survey.Api\Survey.Api.csproj", "{19D9EE07-378B-41C0-BC23-A845EC847AEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Survey.Core", "Survey.Core\Survey.Core.csproj", "{7E11ED91-81E3-4F12-8620-C7EEACF8D9B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Survey.Core", "Survey.Core\Survey.Core.csproj", "{7E11ED91-81E3-4F12-8620-C7EEACF8D9B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.Core", "Data\Data.Core.csproj", "{9D75B543-7B92-4F47-9FDC-BA08E0FDB23E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{7E11ED91-81E3-4F12-8620-C7EEACF8D9B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E11ED91-81E3-4F12-8620-C7EEACF8D9B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E11ED91-81E3-4F12-8620-C7EEACF8D9B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D75B543-7B92-4F47-9FDC-BA08E0FDB23E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D75B543-7B92-4F47-9FDC-BA08E0FDB23E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D75B543-7B92-4F47-9FDC-BA08E0FDB23E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D75B543-7B92-4F47-9FDC-BA08E0FDB23E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,17 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HDIWebApi.Data
+namespace Data.Entity
 {
     public class SurveyQuestion: BaseEntity
     {      
 
         [Required]
         public string Title { get; set; }
-        public int SurveyId { get; set; }
-        public virtual Survey Survey { get; set; }
+        public int SurveyBaseId { get; set; }
+        public virtual SurveyBase SurveyBase { get; set; }
         public ICollection<SurveyQuestionOption> SurveyQuestionOptions { get; set; }
 
-        public int ExpandSurveyId { get; set; }
-        public virtual Survey ExpandSurvey { get; set; }
+        public int ExpandSurveyBaseId { get; set; }
+        public virtual SurveyBase ExpandSurveyBase { get; set; }
     }
 }

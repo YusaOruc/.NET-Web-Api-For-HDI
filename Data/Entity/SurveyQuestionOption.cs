@@ -1,5 +1,5 @@
-﻿namespace HDIWebApi.Data
-{
+﻿namespace Data.Entity
+{ 
     public class SurveyQuestionOption: BaseEntity
     {
         public string Title { get; set; }

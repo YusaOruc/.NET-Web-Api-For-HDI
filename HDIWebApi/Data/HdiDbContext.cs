@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Data.Entity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace HDIWebApi.Data
@@ -8,27 +9,27 @@ namespace HDIWebApi.Data
         public HdiDbContext(DbContextOptions<HdiDbContext> options) : base(options)
         {
         }
-        public DbSet<Survey> Surveys { get; set; }
+        public DbSet<SurveyBase> SurveyBases { get; set; }
         public DbSet<SurveyQuestion> SurveyQuestions { get; set; }
         public DbSet<SurveyQuestionOption> SurveyQuestionOptions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Survey>()
+            modelBuilder.Entity<SurveyBase>()
                 .HasMany(s => s.SurveyQuestions)
-                .WithOne(sq => sq.Survey)
-                .HasForeignKey(sq => sq.SurveyId);
+                .WithOne(sq => sq.SurveyBase)
+                .HasForeignKey(sq => sq.SurveyBaseId);
 
             modelBuilder.Entity<SurveyQuestion>()
-                .HasOne(sq => sq.Survey)
+                .HasOne(sq => sq.SurveyBase)
                 .WithMany(s => s.SurveyQuestions)
-                .HasForeignKey(sq => sq.SurveyId)
+                .HasForeignKey(sq => sq.SurveyBaseId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<SurveyQuestion>()
-                .HasOne(sq => sq.ExpandSurvey)
+                .HasOne(sq => sq.ExpandSurveyBase)
                 .WithMany()
-                .HasForeignKey(sq => sq.ExpandSurveyId)
+                .HasForeignKey(sq => sq.ExpandSurveyBaseId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<SurveyQuestion>()

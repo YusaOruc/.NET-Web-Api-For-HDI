@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HDIWebApi.Data
+namespace Data.Entity
 {
     public class BaseEntity
     {

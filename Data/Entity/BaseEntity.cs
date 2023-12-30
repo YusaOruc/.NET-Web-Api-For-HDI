@@ -8,10 +8,10 @@ namespace Data.Entity
         public int Id { get; set; }
 
         [Required]
-        public int Creator { get; set; }
+        public string Creator { get; set; }
 
         [Required]
-        public int Updater { get; set; }
+        public string Updater { get; set; }
 
         [Required]
         public DateTime CreateDate { get; set; }

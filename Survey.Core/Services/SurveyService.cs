@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Auth.Core.Interfaces;
+using AutoMapper;
 using Data.Core.DbContexts;
 using Data.Entity;
 using Microsoft.AspNetCore.Http;
@@ -18,23 +19,17 @@ namespace Survey.Core.Services
     {
         private readonly HdiDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public SurveyService(HdiDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        private readonly ISessionService _sessionService;
+        public SurveyService(HdiDbContext context, IMapper mapper, ISessionService sessionService)
         {
             _context = context;
             _mapper = mapper;
-            _httpContextAccessor = httpContextAccessor;
+            _sessionService = sessionService;
         }
 
         public async Task Add(SurveyDto dto)
         {
-            // HttpContext'ten ClaimsPrincipal al
-            var claimsPrincipal = _httpContextAccessor.HttpContext.User;
-
-            // Kullanıcının ID'sini al
-            string userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-
+            var userId = await _sessionService.GetAuthenticatedUserIdAsync();
 
             var created = DateTime.UtcNow;
 
@@ -42,8 +37,8 @@ namespace Survey.Core.Services
 
             obj.CreateDate = created;
             obj.LastUpdateDate = created;
-            obj.Creator = Convert.ToInt32( userId);
-            obj.Updater = Convert.ToInt32(userId);
+            obj.Creator = userId;
+            obj.Updater = userId;
         }
     }
 }

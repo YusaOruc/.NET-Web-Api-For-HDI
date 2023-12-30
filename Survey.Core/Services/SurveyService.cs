@@ -39,6 +39,25 @@ namespace Survey.Core.Services
             obj.LastUpdateDate = created;
             obj.Creator = userId;
             obj.Updater = userId;
+
+            foreach (var question in obj.SurveyQuestions)
+            {
+                question.CreateDate = created;
+                question.LastUpdateDate = created;
+                question.Creator = userId;
+                question.Updater = userId;
+
+                foreach (var option in question.SurveyQuestionOptions)
+                {
+                    option.CreateDate = created;
+                    option.LastUpdateDate = created;
+                    option.Creator = userId;
+                    option.Updater = userId;
+                }
+            }
+
+            _context.SurveyBases.Add(obj);
+            await _context.SaveChangesAsync();
         }
     }
 }

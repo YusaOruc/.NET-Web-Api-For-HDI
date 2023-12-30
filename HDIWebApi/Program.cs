@@ -1,11 +1,10 @@
-using Auth.Core.Extensions;
 using Auth.Api.Extensions;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Survey.Api.Extensions;
 using Data.Core.DbContexts;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using AutoMapper;
+using AutoMapper.EquivalencyExpression;
 
 
 
@@ -28,6 +27,13 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 })
     .AddEntityFrameworkStores<HdiDbContext>()
     .AddDefaultTokenProviders();
+
+// Auto Mapper Configurations
+//builder.Services.AddAutoMapper(cfg =>
+//{
+//    cfg.AddCollectionMappers();
+//}, AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddAuthModule(builder.Configuration);
 builder.Services.AddSurveyModule();

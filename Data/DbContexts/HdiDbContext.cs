@@ -31,7 +31,7 @@ namespace Data.Core.DbContexts
                 .HasForeignKey(sq => sq.SurveyBaseId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<SurveyQuestion>()
+            modelBuilder.Entity<SurveyQuestionOption>()
                 .HasOne(sq => sq.ExpandSurveyBase)
                 .WithMany()
                 .HasForeignKey(sq => sq.ExpandSurveyBaseId)

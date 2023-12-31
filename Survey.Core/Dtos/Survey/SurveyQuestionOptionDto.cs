@@ -9,5 +9,6 @@ namespace Survey.Core.Dtos.Survey
     public class SurveyQuestionOptionDto
     {
         public string Title { get; set; }
+        public int? ExpandSurveyBaseId { get; set; }
     }
 }

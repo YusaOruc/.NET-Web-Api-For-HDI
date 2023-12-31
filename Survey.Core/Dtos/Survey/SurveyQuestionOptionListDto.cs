@@ -15,5 +15,6 @@ namespace Survey.Core.Dtos.Survey
         public string Updater { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime LastUpdateDate { get; set; }
+        public int? ExpandSurveyBaseId { get; set; }
     }
 }

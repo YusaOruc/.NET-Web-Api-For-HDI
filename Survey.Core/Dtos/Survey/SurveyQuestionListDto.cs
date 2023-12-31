@@ -15,7 +15,6 @@ namespace Survey.Core.Dtos.Survey
         public string Title { get; set; }
         public int SurveyBaseId { get; set; }
         public ICollection<SurveyQuestionOptionListDto> SurveyQuestionOptions { get; set; }
-        public int? ExpandSurveyBaseId { get; set; }
 
 
         public string Creator { get; set; }

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace Data.Core.DbContexts
 {
-    public class HdiDbContext : IdentityDbContext
+    public class HdiDbContext : IdentityDbContext<ApplicationUser>
     {
         public HdiDbContext(DbContextOptions<HdiDbContext> options) : base(options)
         {
@@ -16,7 +16,7 @@ namespace Data.Core.DbContexts
         public DbSet<SurveyBase> SurveyBases { get; set; }
         public DbSet<SurveyQuestion> SurveyQuestions { get; set; }
         public DbSet<SurveyQuestionOption> SurveyQuestionOptions { get; set; }
-        public DbSet<SurveyResult> SurveyResult { get; set; }
+        public DbSet<SurveyResult> SurveyResults { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,6 +48,31 @@ namespace Data.Core.DbContexts
                 .HasForeignKey(sq => sq.SurveyQuestionId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<SurveyResult>()
+                .HasOne(sq => sq.SurveyBase)
+                .WithMany()
+                .HasForeignKey(sq => sq.SurveyBaseId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<SurveyResult>()
+                .HasOne(sq => sq.SurveyQuestion)
+                .WithMany()
+                .HasForeignKey(sq => sq.SurveyQuestionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+          
+            modelBuilder.Entity<SurveyResult>()
+                .HasOne(sq => sq.ApplicationUser)  // ApplicationUser bir gezinme özelliği ise
+                .WithMany()
+                .HasForeignKey(sq => sq.ApplicationUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<SurveyResult>()
+               .HasOne(sq => sq.SurveyQuestionOption)
+               .WithMany()
+               .HasForeignKey(sq => sq.SurveyQuestionOptionId)
+               .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }

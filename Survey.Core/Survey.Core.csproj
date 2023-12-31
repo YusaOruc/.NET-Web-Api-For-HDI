@@ -25,4 +25,7 @@
 	  <ProjectReference Include="..\Auth.Core\Auth.Core.csproj" />
 	  <ProjectReference Include="..\Data\Data.Core.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Queries\" />
+	</ItemGroup>
 </Project>

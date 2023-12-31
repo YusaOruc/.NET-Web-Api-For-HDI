@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Survey.Core.Dtos.Survey;
+using Survey.Core.Dtos.SurveyResult;
 using Survey.Core.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -273,6 +274,55 @@ namespace Survey.Core.Services
                 .ToListAsync();
 
             return result;
+        }
+
+        public async Task AddAnketResultMultiple(int anketId, List<SurveyResultDto> surveyResults)
+        {
+            var userId = await _sessionService.GetAuthenticatedUserIdAsync();
+
+            var created = DateTime.UtcNow;
+
+            //foreach (var result in surveyResults)
+            //{
+                
+            //    var updateObj = await _context.SurveyResult
+            //        .AsTracking()
+            //        .Where(t => t.VatandasId == result.VatandasId)
+            //        .Where(t => t.PersonelId == result.PersonelId)
+            //        .Where(t => t.UserId == result.UserId)
+            //        .Where(t => t.AnketId == result.AnketId)
+            //        .Where(t => t.AnketQuestionId == result.AnketQuestionId)
+            //        .FirstOrDefaultAsync();
+
+
+
+
+            //    if (updateObj != null)
+            //    {
+            //        updateObj = _mapper.Map(result, updateObj);
+            //        updateObj.LastUpdateDate = created;
+            //        updateObj.Updater = _session.UserId;
+            //        updateObj.CustomerId = (int)customerId;
+            //        updateObj.AnketorUserId = _session.UserId;
+            //        if (!result.Yorum.IsNullOrWhiteSpace())
+            //        {
+            //            updateObj.AnketQuestionOptionId = null;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        var obj = _mapper.Map<AnketResult>(result);
+            //        obj.CreateDate = created;
+            //        obj.LastUpdateDate = created;
+            //        obj.Creator = _session.UserId;
+            //        obj.Updater = _session.UserId;
+            //        obj.CustomerId = (int)customerId;
+            //        obj.AnketorUserId = _session.UserId;
+
+            //        _context.AnketResults.Add(obj);
+            //    }
+            //}
+
         }
     }
 }

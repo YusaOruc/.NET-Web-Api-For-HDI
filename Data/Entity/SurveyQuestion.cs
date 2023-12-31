@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Data.Core.Entity;
+using System.ComponentModel.DataAnnotations;
 
 namespace Data.Entity
 {
@@ -10,5 +11,6 @@ namespace Data.Entity
         public int SurveyBaseId { get; set; }
         public virtual SurveyBase SurveyBase { get; set; }
         public ICollection<SurveyQuestionOption> SurveyQuestionOptions { get; set; }
+        public ICollection<SurveyResult> SurveyResults { get; set; }
     }
 }

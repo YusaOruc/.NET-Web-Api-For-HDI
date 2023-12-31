@@ -1,5 +1,6 @@
 ﻿using Data.Core.Dtos;
 using Survey.Core.Dtos.Survey;
+using Survey.Core.Dtos.SurveyResult;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,5 +68,13 @@ namespace Survey.Core.Interfaces
         /// <param name="parentId">parent Id</param>
         /// <returns></returns>
         Task<IEnumerable<NameDto>> GetNameList(int? parentId);
+
+        /// <summary>
+        /// Anketin cevaplarını ekler
+        /// </summary>
+        /// <param name="anketId"></param>
+        /// <param name="surveyResults"></param>
+        /// <returns></returns>
+        Task AddAnketResultMultiple( int anketId, List<SurveyResultDto> surveyResults);
     }
 }

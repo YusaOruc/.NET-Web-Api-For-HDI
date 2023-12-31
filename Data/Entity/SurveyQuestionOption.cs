@@ -1,4 +1,6 @@
-﻿namespace Data.Entity
+﻿using Data.Core.Entity;
+
+namespace Data.Entity
 { 
     public class SurveyQuestionOption: BaseEntity
     {
@@ -8,5 +10,6 @@
 
         public int? ExpandSurveyBaseId { get; set; }
         public virtual SurveyBase ExpandSurveyBase { get; set; }
+        public ICollection<SurveyResult> SurveyResults { get; set; }
     }
 }

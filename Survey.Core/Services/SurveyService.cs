@@ -2,6 +2,7 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Data.Core.DbContexts;
+using Data.Core.Dtos;
 using Data.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -35,7 +36,7 @@ namespace Survey.Core.Services
             var obj = _mapper.Map<SurveyBase>(dto);
 
             obj = await AddInitial(obj);
-            if (dto.Parts!=null)
+            if (dto.Parts != null)
             {
                 foreach (var part in dto.Parts)
                 {
@@ -44,10 +45,10 @@ namespace Survey.Core.Services
                     var result = await AddInitial(partObj);
                 }
             }
-           
+
 
         }
-        public async Task AddPart(int parentId,SurveyDto dto)
+        public async Task AddPart(int parentId, SurveyDto dto)
         {
             var obj = _mapper.Map<SurveyBase>(dto);
 
@@ -218,15 +219,15 @@ namespace Survey.Core.Services
         public async Task RemoveParts(int id, List<int>? partIds)
         {
             var deletedParts = new List<SurveyBase>();
-            if (partIds==null)
+            if (partIds == null)
             {
-                deletedParts =await _context.SurveyBases.AsTracking().Where(t =>  t.ParentId == id).ToListAsync();
+                deletedParts = await _context.SurveyBases.AsTracking().Where(t => t.ParentId == id).ToListAsync();
             }
             else
             {
-                 deletedParts = await _context.SurveyBases.AsTracking().Where(t => !partIds.Contains(t.Id) && t.ParentId == id).ToListAsync();
+                deletedParts = await _context.SurveyBases.AsTracking().Where(t => !partIds.Contains(t.Id) && t.ParentId == id).ToListAsync();
             }
-            
+
 
             var qustions = new List<SurveyQuestion>();
             foreach (var part in deletedParts)
@@ -253,6 +254,25 @@ namespace Survey.Core.Services
             _context.SurveyBases.RemoveRange(deletedParts);
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<NameDto>> GetNameList(int? parentId)
+        {
+            var userId = await _sessionService.GetAuthenticatedUserIdAsync();
+
+            var result = await _context.SurveyBases.AsNoTracking()
+                .Include(t => t.SurveyQuestions)
+                .Where(t => t.Creator == userId)
+                .Where(t => parentId == null || t.ParentId == parentId)
+                .Select(t => new NameDto
+                {
+                    Id = t.Id,
+                    Name = t.Title
+                })
+                .OrderByDescending(t => t.Name)
+                .ToListAsync();
+
+            return result;
         }
     }
 }

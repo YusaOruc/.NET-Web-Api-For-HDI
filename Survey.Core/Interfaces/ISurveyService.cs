@@ -1,4 +1,5 @@
-﻿using Survey.Core.Dtos.Survey;
+﻿using Data.Core.Dtos;
+using Survey.Core.Dtos.Survey;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,8 +57,15 @@ namespace Survey.Core.Interfaces
         /// Anket partlarını siler
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="dto"></param>
+        /// <param name="partIds"></param>
         /// <returns></returns>
         Task RemoveParts(int id, List<int>? partIds);
+
+        /// <summary>
+        /// Anket İsimlerini Listeleme
+        /// </summary>
+        /// <param name="parentId">parent Id</param>
+        /// <returns></returns>
+        Task<IEnumerable<NameDto>> GetNameList(int? parentId);
     }
 }

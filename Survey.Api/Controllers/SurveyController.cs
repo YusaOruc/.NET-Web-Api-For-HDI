@@ -1,6 +1,7 @@
 ﻿using Auth.Core.Interfaces;
 using AutoMapper;
 using Data.Core.DbContexts;
+using Data.Core.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -128,6 +129,22 @@ namespace Survey.Api.Controllers
             await _surveyService.Update(id, dto);
 
             return NoContent();
+        }
+
+        /// <summary>
+        ///     Anket Listeleme
+        /// </summary>
+        /// <response code="200">Başarılı Listeleme</response>
+        /// <response code="400">Eksik olan Fieldlar</response>
+        [Authorize]
+        [HttpGet("SurveyNames")]
+        [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
+        [ProducesResponseType(typeof(IEnumerable<NameDto>), 200)]
+        public async Task<ActionResult<IEnumerable<NameDto>>> GetSurveyNames([FromQuery] int? parentId)
+        {
+            var obj = await _surveyService.GetNameList(parentId);
+
+            return Ok(obj);
         }
     }
 }

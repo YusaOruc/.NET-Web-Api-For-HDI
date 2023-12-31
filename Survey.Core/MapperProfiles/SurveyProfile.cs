@@ -39,6 +39,7 @@ namespace Survey.Core.MapperProfiles
             CreateMap<SurveyBase, SurveySummaryListDto>();
 
             CreateMap<SurveyResultDto, SurveyResult>();
+            CreateMap<SurveyResult, SurveyResultListDto>();
         }
     }
 }

@@ -164,5 +164,22 @@ namespace Survey.Api.Controllers
             await _surveyService.AddSurveyResultMultiple(anketId, surveyResults);
             return NoContent();
         }
+
+
+        /// <summary>
+        ///     Anket Cevaplarını Listeleme
+        /// </summary>
+        /// <response code="200">Başarılı Listeleme</response>
+        /// <response code="400">Eksik olan Fieldlar</response>
+        [Authorize]
+        [HttpGet("Results")]
+        [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
+        [ProducesResponseType(typeof(IEnumerable<SurveyResultListDto>), 200)]
+        public async Task<ActionResult<IEnumerable<SurveyResultListDto>>> GetSurveyResults(int? surveyId)
+        {
+            var obj = await _surveyService.GetSurveyResultList(surveyId);
+
+            return Ok(obj);
+        }
     }
 }

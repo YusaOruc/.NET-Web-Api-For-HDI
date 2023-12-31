@@ -318,5 +318,21 @@ namespace Survey.Core.Services
             await _context.SaveChangesAsync();
 
         }
+
+        public async Task<IEnumerable<SurveyResultListDto>> GetSurveyResultList(int? surveyId)
+        {
+            var userId = await _sessionService.GetAuthenticatedUserIdAsync();
+
+
+            var result = await _context.SurveyResults
+                .AsNoTracking()
+                .Where(t => t.ApplicationUserId == userId)
+                .Where(t => t.SurveyBaseId == surveyId)
+                .ProjectTo<SurveyResultListDto>(_mapper.ConfigurationProvider)
+                .OrderByDescending(t => t.CreateDate)
+                .ToListAsync();
+
+            return result;
+        }
     }
 }

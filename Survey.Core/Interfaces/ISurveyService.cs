@@ -72,9 +72,16 @@ namespace Survey.Core.Interfaces
         /// <summary>
         /// Anketin cevaplarını ekler
         /// </summary>
-        /// <param name="anketId"></param>
+        /// <param name="surveyId"></param>
         /// <param name="surveyResults"></param>
         /// <returns></returns>
-        Task AddSurveyResultMultiple( int anketId, List<SurveyResultDto> surveyResults);
+        Task AddSurveyResultMultiple( int surveyId, List<SurveyResultDto> surveyResults);
+
+        /// <summary>
+        /// Anket Cevaplarıı Listeleme
+        /// </summary>
+        /// <param name="surveyId">parent Id</param>
+        /// <returns></returns>
+        Task<IEnumerable<SurveyResultListDto>> GetSurveyResultList(int? surveyId);
     }
 }

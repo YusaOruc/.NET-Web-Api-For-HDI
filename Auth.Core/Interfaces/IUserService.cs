@@ -1,4 +1,5 @@
 ﻿using Auth.Core.Dtos.User;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,12 @@ namespace Auth.Core.Interfaces
         /// </summary>
         /// <returns></returns>
         Task<IEnumerable<UserListDto>> GetList();
+
+        /// <summary>
+        /// Kullanıcı Ekleme
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        Task<IdentityResult> Add(UserDto dto);
     }
 }

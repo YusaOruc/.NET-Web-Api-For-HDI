@@ -20,12 +20,14 @@ namespace Auth.Core.Services
         private readonly IMapper _mapper;
         private readonly ISessionService _sessionService;
         private readonly UserManager<ApplicationUser> _userManager;
-        public UserService(UserManager<ApplicationUser> userManager, HdiDbContext context, IMapper mapper, ISessionService sessionService)
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public UserService(RoleManager<IdentityRole> roleManager,UserManager<ApplicationUser> userManager, HdiDbContext context, IMapper mapper, ISessionService sessionService)
         {
             _userManager = userManager;
             _context = context;
             _mapper = mapper;
             _sessionService = sessionService;
+            _roleManager = roleManager;
         }
         public async Task<UserListDto> Get(string id)
         {
@@ -49,6 +51,34 @@ namespace Auth.Core.Services
                 .ProjectTo<UserListDto>(_mapper.ConfigurationProvider)
                 .OrderByDescending(t => t.UserName)
                 .ToListAsync();
+
+            return result;
+        }
+
+        public async Task<IdentityResult> Add(UserDto dto)
+        {
+            // Kullanıcı adının (UserName) benzersiz olmasını sağlamak için kontrol
+            if (await _userManager.FindByNameAsync(dto.Username) != null)
+            {
+                // Kullanıcı adı zaten kullanımda ise hata döndür
+                return IdentityResult.Failed(new IdentityError { Description = "Username is already taken." });
+            }
+
+            var user = new ApplicationUser { UserName = dto.Username, Email = dto.Username };
+
+            // Kullanıcının belirtilen rolu ile kaydedilmesi
+            var result = await _userManager.CreateAsync(user, dto.Password);
+            if (result.Succeeded)
+            {
+                if (!await _roleManager.RoleExistsAsync(dto.Role))
+                {
+                    // Belirtilen rol henüz yoksa, rolü oluşturun
+                    await _roleManager.CreateAsync(new IdentityRole(dto.Role));
+                }
+
+                // Kullanıcıya belirtilen rol atanıyor
+                await _userManager.AddToRoleAsync(user, dto.Role);
+            }
 
             return result;
         }

@@ -2,6 +2,7 @@
 using Auth.Core.Interfaces;
 using Auth.Core.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -57,6 +58,24 @@ namespace Auth.Api.Controllers
             var obj = await _userService.GetList();
 
             return Ok(obj);
+        }
+
+
+        /// <summary>
+        ///     Kullanıcı Ekleme 
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <response code="201">Eklenen "dto" objesi</response>
+        /// <response code="400">Eksik olan Fieldlar</response>
+        [Authorize(Roles = "Anketor")]
+        [HttpPost("PostUser")]
+        [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
+        [ProducesResponseType(typeof(IdentityResult), 201)]
+        public async Task<ActionResult<IdentityResult>> PostUser([FromBody] UserDto dto)
+        {
+            await _userService.Add(dto);
+
+            return NoContent();
         }
     }
 }

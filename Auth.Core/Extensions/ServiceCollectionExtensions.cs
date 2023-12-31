@@ -1,4 +1,5 @@
 ﻿using Auth.Core.Interfaces;
+using Auth.Core.MapperProfile;
 using Auth.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -13,6 +14,8 @@ namespace Auth.Core.Extensions
     {
         public static void AddAuthServices(this IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(UserProfile));
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ISessionService, SessionService>();
         }

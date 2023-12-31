@@ -37,7 +37,7 @@ namespace Survey.Api.Controllers
         /// <param name="dto"></param>
         /// <response code="201">Eklenen "dto" objesi</response>
         /// <response code="400">Eksik olan Fieldlar</response>
-        [Authorize]
+        [Authorize(Roles ="Anketor")]
         [HttpPost("PostSurvey")]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(typeof(void), 201)]
@@ -92,7 +92,7 @@ namespace Survey.Api.Controllers
         /// <param name="dto"></param>
         /// <response code="204">Başarılı Güncelleme</response>
         /// <response code="400">Eksik olan Fieldlar</response>
-        [Authorize]
+        [Authorize(Roles = "Anketor")]
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(typeof(void), 204)]
@@ -151,7 +151,7 @@ namespace Survey.Api.Controllers
         /// <summary>
         ///  Anketin cevaplarını ekler
         /// </summary>
-        /// <param name="anketId"></param>
+        /// <param name="surveyId"></param>
         /// <param name="surveyResults"></param>
         /// <response code="201">Eklenen "dto" objesi</response>
         /// <response code="400">Eksik olan Fieldlar</response>
@@ -159,9 +159,9 @@ namespace Survey.Api.Controllers
         [HttpPost("SurveyResultMultiple")]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(typeof(void), 201)]
-        public async Task<ActionResult> PostSurveyResultMultiple([FromQuery] int anketId, [FromBody] List<SurveyResultDto> surveyResults )
+        public async Task<ActionResult> PostSurveyResultMultiple([FromQuery] int surveyId, [FromBody] List<SurveyResultDto> surveyResults )
         {
-            await _surveyService.AddSurveyResultMultiple(anketId, surveyResults);
+            await _surveyService.AddSurveyResultMultiple(surveyId, surveyResults);
             return NoContent();
         }
 

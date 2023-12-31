@@ -3,6 +3,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Data.Core.DbContexts;
 using Data.Core.Dtos;
+using Data.Core.Entity;
 using Data.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -276,52 +277,45 @@ namespace Survey.Core.Services
             return result;
         }
 
-        public async Task AddAnketResultMultiple(int anketId, List<SurveyResultDto> surveyResults)
+        public async Task AddSurveyResultMultiple(int anketId, List<SurveyResultDto> surveyResults)
         {
             var userId = await _sessionService.GetAuthenticatedUserIdAsync();
 
             var created = DateTime.UtcNow;
 
-            //foreach (var result in surveyResults)
-            //{
+            foreach (var result in surveyResults)
+            {
                 
-            //    var updateObj = await _context.SurveyResult
-            //        .AsTracking()
-            //        .Where(t => t.VatandasId == result.VatandasId)
-            //        .Where(t => t.PersonelId == result.PersonelId)
-            //        .Where(t => t.UserId == result.UserId)
-            //        .Where(t => t.AnketId == result.AnketId)
-            //        .Where(t => t.AnketQuestionId == result.AnketQuestionId)
-            //        .FirstOrDefaultAsync();
+                var updateObj = await _context.SurveyResults
+                    .AsTracking()
+                    .Where(t => t.ApplicationUserId == userId)
+                    .Where(t => t.SurveyBaseId == result.SurveyBaseId)
+                    .Where(t => t.SurveyQuestionId == result.SurveyQuestionId)
+                    .FirstOrDefaultAsync();
 
 
 
 
-            //    if (updateObj != null)
-            //    {
-            //        updateObj = _mapper.Map(result, updateObj);
-            //        updateObj.LastUpdateDate = created;
-            //        updateObj.Updater = _session.UserId;
-            //        updateObj.CustomerId = (int)customerId;
-            //        updateObj.AnketorUserId = _session.UserId;
-            //        if (!result.Yorum.IsNullOrWhiteSpace())
-            //        {
-            //            updateObj.AnketQuestionOptionId = null;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        var obj = _mapper.Map<AnketResult>(result);
-            //        obj.CreateDate = created;
-            //        obj.LastUpdateDate = created;
-            //        obj.Creator = _session.UserId;
-            //        obj.Updater = _session.UserId;
-            //        obj.CustomerId = (int)customerId;
-            //        obj.AnketorUserId = _session.UserId;
+                if (updateObj != null)
+                {
+                    updateObj = _mapper.Map(result, updateObj);
+                    updateObj.LastUpdateDate = created;
+                    updateObj.Updater = userId;
+                }
+                else
+                {
+                    var obj = _mapper.Map<SurveyResult>(result);
+                    obj.CreateDate = created;
+                    obj.LastUpdateDate = created;
+                    obj.Creator = userId;
+                    obj.Updater = userId;
+                    obj.ApplicationUserId= userId;
 
-            //        _context.AnketResults.Add(obj);
-            //    }
-            //}
+                    _context.SurveyResults.Add(obj);
+                }
+            }
+
+            await _context.SaveChangesAsync();
 
         }
     }

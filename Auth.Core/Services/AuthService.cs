@@ -1,5 +1,6 @@
 ﻿using Auth.Core.Dtos;
 using Auth.Core.Interfaces;
+using Data.Core.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -12,12 +13,12 @@ namespace Auth.Core.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _config;
 
-        public AuthService(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<IdentityUser> signInManager, IConfiguration config)
+        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager, IConfiguration config)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -31,7 +32,7 @@ namespace Auth.Core.Services
             return true; // Başarıyla çıkış yapıldı
         }
 
-        public async Task<IdentityResult> RegisterUser(string username, string password)
+        public async Task<IdentityResult> RegisterUser(string username, string password,string role)
         {
             // Kullanıcı adının (UserName) benzersiz olmasını sağlamak için kontrol
             if (await _userManager.FindByNameAsync(username) != null)
@@ -40,20 +41,20 @@ namespace Auth.Core.Services
                 return IdentityResult.Failed(new IdentityError { Description = "Username is already taken." });
             }
 
-            var user = new IdentityUser { UserName = username, Email = username };
+            var user = new ApplicationUser { UserName = username, Email = username };
 
             // Kullanıcının belirtilen rolu ile kaydedilmesi
             var result = await _userManager.CreateAsync(user, password);
             if (result.Succeeded)
             {
-                if (!await _roleManager.RoleExistsAsync("Anketor"))
+                if (!await _roleManager.RoleExistsAsync(role))
                 {
                     // Belirtilen rol henüz yoksa, rolü oluşturun
-                    await _roleManager.CreateAsync(new IdentityRole("Anketor"));
+                    await _roleManager.CreateAsync(new IdentityRole(role));
                 }
 
                 // Kullanıcıya belirtilen rol atanıyor
-                await _userManager.AddToRoleAsync(user, "Anketor");
+                await _userManager.AddToRoleAsync(user, role);
             }
 
             return result;

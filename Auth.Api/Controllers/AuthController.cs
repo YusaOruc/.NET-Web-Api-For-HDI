@@ -39,9 +39,9 @@ namespace Auth.Api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(string username, string password)
+        public async Task<IActionResult> Register(string username, string password, string role)
         {
-            var result = await _authService.RegisterUser(username, password);
+            var result = await _authService.RegisterUser(username, password, role);
 
             if (result.Succeeded)
             {

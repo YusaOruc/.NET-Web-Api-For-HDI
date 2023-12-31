@@ -75,6 +75,6 @@ namespace Survey.Core.Interfaces
         /// <param name="anketId"></param>
         /// <param name="surveyResults"></param>
         /// <returns></returns>
-        Task AddAnketResultMultiple( int anketId, List<SurveyResultDto> surveyResults);
+        Task AddSurveyResultMultiple( int anketId, List<SurveyResultDto> surveyResults);
     }
 }

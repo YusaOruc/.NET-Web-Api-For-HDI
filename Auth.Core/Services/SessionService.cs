@@ -1,4 +1,5 @@
 ﻿using Auth.Core.Interfaces;
+using Data.Core.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -13,8 +14,8 @@ namespace Auth.Core.Services
     public class SessionService: ISessionService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly UserManager<IdentityUser> _userManager;
-        public SessionService(IHttpContextAccessor httpContextAccessor, UserManager<IdentityUser> userManager)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public SessionService(IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager)
         {
             _httpContextAccessor = httpContextAccessor;
             _userManager = userManager;

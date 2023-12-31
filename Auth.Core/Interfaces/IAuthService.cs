@@ -10,7 +10,7 @@ namespace Auth.Core.Interfaces
         /// </summary>
         /// <returns></returns>
         Task<bool> Logout();
-        Task<IdentityResult> RegisterUser(string username, string password);
+        Task<IdentityResult> RegisterUser(string username, string password, string role);
         Task<LoginResultDto> LoginUser(string username, string password);
         string GenerateTokenString(string username, string password);
     }

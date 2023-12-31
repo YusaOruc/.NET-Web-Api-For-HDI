@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Survey.Core.Dtos.Survey;
 using Data.Entity;
+using Data.Core.Entity;
+using Survey.Core.Dtos.SurveyResult;
 
 namespace Survey.Core.MapperProfiles
 {
@@ -35,6 +37,8 @@ namespace Survey.Core.MapperProfiles
             CreateMap<SurveyQuestionOption, SurveyQuestionOptionListDto>();
 
             CreateMap<SurveyBase, SurveySummaryListDto>();
+
+            CreateMap<SurveyResultDto, SurveyResult>();
         }
     }
 }

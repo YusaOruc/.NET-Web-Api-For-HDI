@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Survey.Core.Dtos.Survey;
+using Survey.Core.Dtos.SurveyResult;
 using Survey.Core.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -145,6 +146,23 @@ namespace Survey.Api.Controllers
             var obj = await _surveyService.GetNameList(parentId);
 
             return Ok(obj);
+        }
+
+        /// <summary>
+        ///  Anketin cevaplarını ekler
+        /// </summary>
+        /// <param name="anketId"></param>
+        /// <param name="surveyResults"></param>
+        /// <response code="201">Eklenen "dto" objesi</response>
+        /// <response code="400">Eksik olan Fieldlar</response>
+        [Authorize]
+        [HttpPost("SurveyResultMultiple")]
+        [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
+        [ProducesResponseType(typeof(void), 201)]
+        public async Task<ActionResult> PostSurveyResultMultiple([FromQuery] int anketId, [FromBody] List<SurveyResultDto> surveyResults )
+        {
+            await _surveyService.AddSurveyResultMultiple(anketId, surveyResults);
+            return NoContent();
         }
     }
 }

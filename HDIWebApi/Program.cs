@@ -5,6 +5,8 @@ using Survey.Api.Extensions;
 using Data.Core.DbContexts;
 using AutoMapper;
 using AutoMapper.EquivalencyExpression;
+using Data.Core.Entity;
+using Microsoft.Extensions.DependencyInjection;
 
 
 
@@ -16,7 +18,7 @@ builder.Services.AddDbContext<HdiDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings:DefaultConnection").Value, b => b.MigrationsAssembly("HDIWebApi"));
 });
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     // Þifre politikalarýný devre dýþý býrakma
     options.Password.RequireDigit = false;   // Rakam zorunlu deðil

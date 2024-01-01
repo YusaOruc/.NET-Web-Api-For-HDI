@@ -38,7 +38,7 @@ namespace Auth.Core.Services
                 roles = (List<string>)await _userManager.GetRolesAsync(user);
             }
             var obj = _mapper.Map<UserListDto>(user);
-            obj.Roles = roles;
+            obj.Role = roles.FirstOrDefault();
 
 
             return obj;

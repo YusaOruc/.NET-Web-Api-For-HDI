@@ -14,7 +14,7 @@ namespace Survey.Core.Dtos.SurveyResult
         public int SurveyQuestionId { get; set; }
         public int SurveyQuestionOptionId { get; set; }
         public string ApplicationUserId { get; set; }
-        public int? CorrectQuestionIndex { get; set; }
+        public int? CorrectQuestionOptionIndex { get; set; }
         public bool? IsCorrect { get; set; }
 
         public string SurveyBaseTitle { get; set; }

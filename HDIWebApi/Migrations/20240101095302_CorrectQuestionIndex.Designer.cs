@@ -4,6 +4,7 @@ using Data.Core.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HDIWebApi.Migrations
 {
     [DbContext(typeof(HdiDbContext))]
-    partial class HdiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240101095302_CorrectQuestionIndex")]
+    partial class CorrectQuestionIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -202,7 +205,7 @@ namespace HDIWebApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CorrectQuestionIndex")
+                    b.Property<int>("CorrectQuestionIndex")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")

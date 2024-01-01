@@ -1,6 +1,7 @@
 ﻿using Auth.Core.Dtos.User;
 using Auth.Core.Interfaces;
 using Auth.Core.Services;
+using Data.Core.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -76,6 +77,22 @@ namespace Auth.Api.Controllers
             await _userService.Add(dto);
 
             return NoContent();
+        }
+
+        /// <summary>
+        ///     Kullanıcı Adlarını Listeleme
+        /// </summary>
+        /// <response code="200">Başarılı Listeleme</response>
+        /// <response code="400">Eksik olan Fieldlar</response>
+        [Authorize]
+        [HttpGet("UserNames")]
+        [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
+        [ProducesResponseType(typeof(IEnumerable<UserNameDto>), 200)]
+        public async Task<ActionResult<IEnumerable<UserNameDto>>> GetUserNames()
+        {
+            var obj = await _userService.GetNameList();
+
+            return Ok(obj);
         }
     }
 }

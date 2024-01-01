@@ -10,5 +10,6 @@ namespace Survey.Core.Dtos.Survey
     {
         public string Title { get; set; }
         public ICollection<SurveyQuestionOptionDto> SurveyQuestionOptions { get; set; }
+        public int CorrectQuestionIndex { get; set; }
     }
 }

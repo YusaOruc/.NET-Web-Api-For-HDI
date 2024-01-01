@@ -9,6 +9,7 @@ namespace Data.Entity
         [Required]
         public string Title { get; set; }
         public int SurveyBaseId { get; set; }
+        public int? CorrectQuestionIndex { get; set; }
         public virtual SurveyBase SurveyBase { get; set; }
         public ICollection<SurveyQuestionOption> SurveyQuestionOptions { get; set; }
         public ICollection<SurveyResult> SurveyResults { get; set; }

@@ -141,9 +141,9 @@ namespace Survey.Api.Controllers
         [HttpGet("SurveyNames")]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(typeof(IEnumerable<NameDto>), 200)]
-        public async Task<ActionResult<IEnumerable<NameDto>>> GetSurveyNames([FromQuery] int? parentId)
+        public async Task<ActionResult<IEnumerable<NameDto>>> GetSurveyNames([FromQuery] int? parentId, bool isParent)
         {
-            var obj = await _surveyService.GetNameList(parentId);
+            var obj = await _surveyService.GetNameList(parentId, isParent);
 
             return Ok(obj);
         }
@@ -175,9 +175,9 @@ namespace Survey.Api.Controllers
         [HttpGet("Results")]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(typeof(IEnumerable<SurveyResultListDto>), 200)]
-        public async Task<ActionResult<IEnumerable<SurveyResultListDto>>> GetSurveyResults(int? surveyId)
+        public async Task<ActionResult<IEnumerable<SurveyResultListDto>>> GetSurveyResults(int? surveyId, string? userId)
         {
-            var obj = await _surveyService.GetSurveyResultList(surveyId);
+            var obj = await _surveyService.GetSurveyResultList(surveyId, userId);
 
             return Ok(obj);
         }

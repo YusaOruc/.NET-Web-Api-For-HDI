@@ -67,7 +67,7 @@ namespace Survey.Core.Interfaces
         /// </summary>
         /// <param name="parentId">parent Id</param>
         /// <returns></returns>
-        Task<IEnumerable<NameDto>> GetNameList(int? parentId);
+        Task<IEnumerable<NameDto>> GetNameList(int? parentId, bool isParent);
 
         /// <summary>
         /// Anketin cevaplarını ekler
@@ -81,7 +81,8 @@ namespace Survey.Core.Interfaces
         /// Anket Cevaplarıı Listeleme
         /// </summary>
         /// <param name="surveyId">parent Id</param>
+        /// <param name="userId">user Id</param>
         /// <returns></returns>
-        Task<IEnumerable<SurveyResultListDto>> GetSurveyResultList(int? surveyId);
+        Task<IEnumerable<SurveyResultListDto>> GetSurveyResultList(int? surveyId,string? userId);
     }
 }

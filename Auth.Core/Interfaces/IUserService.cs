@@ -29,5 +29,11 @@ namespace Auth.Core.Interfaces
         /// <param name="dto"></param>
         /// <returns></returns>
         Task<IdentityResult> Add(UserDto dto);
+
+        /// <summary>
+        /// Kullanıcı Adlarını listeler
+        /// </summary>
+        /// <returns></returns>
+        Task<IEnumerable<UserNameDto>> GetNameList();
     }
 }

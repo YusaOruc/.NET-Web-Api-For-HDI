@@ -3,6 +3,7 @@ using Auth.Core.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Data.Core.DbContexts;
+using Data.Core.Dtos;
 using Data.Core.Entity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -79,6 +80,19 @@ namespace Auth.Core.Services
                 // Kullanıcıya belirtilen rol atanıyor
                 await _userManager.AddToRoleAsync(user, dto.Role);
             }
+
+            return result;
+        }
+        public async Task<IEnumerable<UserNameDto>> GetNameList()
+        {
+            var result = await _userManager.Users.AsNoTracking()
+                .Select(t => new UserNameDto
+                {
+                    Id = t.Id,
+                    Name = t.UserName
+                })
+                .OrderByDescending(t => t.Name)
+                .ToListAsync();
 
             return result;
         }

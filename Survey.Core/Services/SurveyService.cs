@@ -107,12 +107,9 @@ namespace Survey.Core.Services
 
         public async Task<IEnumerable<SurveySummaryListDto>> GetList()
         {
-            var userId = await _sessionService.GetAuthenticatedUserIdAsync();
-
 
             var result = await _context.SurveyBases.AsNoTracking()
                 .Include(t => t.SurveyQuestions)
-                .Where(t => t.Creator == userId)
                 .Where(t => t.ParentId == null)
                 .ProjectTo<SurveySummaryListDto>(_mapper.ConfigurationProvider)
                 .OrderByDescending(t => t.CreateDate)
@@ -258,13 +255,13 @@ namespace Survey.Core.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<NameDto>> GetNameList(int? parentId)
+        public async Task<IEnumerable<NameDto>> GetNameList(int? parentId,bool isParent = false)
         {
             var userId = await _sessionService.GetAuthenticatedUserIdAsync();
 
             var result = await _context.SurveyBases.AsNoTracking()
                 .Include(t => t.SurveyQuestions)
-                .Where(t => t.Creator == userId)
+                .Where(t => isParent == false || t.ParentId == null)
                 .Where(t => parentId == null || t.ParentId == parentId)
                 .Select(t => new NameDto
                 {
@@ -285,7 +282,7 @@ namespace Survey.Core.Services
 
             foreach (var result in surveyResults)
             {
-                
+
                 var updateObj = await _context.SurveyResults
                     .AsTracking()
                     .Where(t => t.ApplicationUserId == userId)
@@ -309,7 +306,7 @@ namespace Survey.Core.Services
                     obj.LastUpdateDate = created;
                     obj.Creator = userId;
                     obj.Updater = userId;
-                    obj.ApplicationUserId= userId;
+                    obj.ApplicationUserId = userId;
 
                     _context.SurveyResults.Add(obj);
                 }
@@ -319,16 +316,35 @@ namespace Survey.Core.Services
 
         }
 
-        public async Task<IEnumerable<SurveyResultListDto>> GetSurveyResultList(int? surveyId)
+        public async Task<IEnumerable<SurveyResultListDto>> GetSurveyResultList(int? surveyId, string? userId)
         {
-            var userId = await _sessionService.GetAuthenticatedUserIdAsync();
+            var id = userId ?? await _sessionService.GetAuthenticatedUserIdAsync();
 
 
             var result = await _context.SurveyResults
                 .AsNoTracking()
-                .Where(t => t.ApplicationUserId == userId)
-                .Where(t => t.SurveyBaseId == surveyId)
-                .ProjectTo<SurveyResultListDto>(_mapper.ConfigurationProvider)
+                .Where(t => t.ApplicationUserId == id)
+                .Where(t => surveyId == null || t.SurveyBaseId == surveyId)
+                .Select(t => new SurveyResultListDto
+                {
+                    Id = t.Id,
+                    ApplicationUserId = t.ApplicationUserId,
+                    ApplicationUserUserName = t.ApplicationUser.Id,
+                    CorrectQuestionIndex = t.SurveyQuestion.CorrectQuestionIndex,
+                    IsCorrect = t.SurveyQuestion.CorrectQuestionIndex != null ? t.SurveyQuestion.SurveyQuestionOptions.ToList()[t.SurveyQuestion.CorrectQuestionIndex - 1 ?? 0].Id == t.SurveyQuestionOptionId : false,
+                    SurveyQuestionOptionId = t.SurveyQuestionOptionId,
+                    CreateDate = t.CreateDate,
+                    Creator = t.Creator,
+                    LastUpdateDate = t.LastUpdateDate,
+                    Updater = t.Updater,
+                    SurveyBaseId = t.SurveyBaseId,
+                    SurveyBaseTitle = t.SurveyBase.Title,
+                    SurveyQuestionId = t.SurveyQuestionId,
+                    SurveyQuestionOptionTitle = t.SurveyQuestionOption.Title,
+                    SurveyQuestionTitle = t.SurveyQuestion.Title
+
+
+                })
                 .OrderByDescending(t => t.CreateDate)
                 .ToListAsync();
 

@@ -54,7 +54,7 @@ namespace Survey.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <response code="200">Anket bilgileri</response>
-        [Authorize]
+        [Authorize(Roles = "Anketor,StandardUser")]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(SurveyListDto), 200)]
         public async Task<ActionResult<SurveyListDto>> GetSurvey([FromRoute] int id)
@@ -74,7 +74,7 @@ namespace Survey.Api.Controllers
         /// </summary>
         /// <response code="200">Başarılı Listeleme</response>
         /// <response code="400">Eksik olan Fieldlar</response>
-        [Authorize]
+        [Authorize(Roles = "StandardUser,Anketor,StandardUser")]
         [HttpGet]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(typeof(IEnumerable<SurveySummaryListDto>), 200)]
@@ -137,7 +137,7 @@ namespace Survey.Api.Controllers
         /// </summary>
         /// <response code="200">Başarılı Listeleme</response>
         /// <response code="400">Eksik olan Fieldlar</response>
-        [Authorize]
+        [Authorize(Roles = "Reporting,Anketor,StandardUser")]
         [HttpGet("SurveyNames")]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(typeof(IEnumerable<NameDto>), 200)]
@@ -155,7 +155,7 @@ namespace Survey.Api.Controllers
         /// <param name="surveyResults"></param>
         /// <response code="201">Eklenen "dto" objesi</response>
         /// <response code="400">Eksik olan Fieldlar</response>
-        [Authorize]
+        [Authorize(Roles = "StandardUser")]
         [HttpPost("SurveyResultMultiple")]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(typeof(void), 201)]
@@ -171,7 +171,7 @@ namespace Survey.Api.Controllers
         /// </summary>
         /// <response code="200">Başarılı Listeleme</response>
         /// <response code="400">Eksik olan Fieldlar</response>
-        [Authorize]
+        [Authorize(Roles = "Reporting,StandardUser")]
         [HttpGet("Results")]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(typeof(IEnumerable<SurveyResultListDto>), 200)]

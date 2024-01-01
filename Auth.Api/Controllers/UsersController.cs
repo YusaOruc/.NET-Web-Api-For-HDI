@@ -30,7 +30,7 @@ namespace Auth.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <response code="200">Kullanıcı bilgileri</response>
-        [Authorize]
+        [Authorize(Roles = "Anketor")]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(UserListDto), 200)]
         public async Task<ActionResult<UserListDto>> GetUser([FromRoute] string id)
@@ -50,7 +50,7 @@ namespace Auth.Api.Controllers
         /// </summary>
         /// <response code="200">Başarılı Listeleme</response>
         /// <response code="400">Eksik olan Fieldlar</response>
-        [Authorize]
+        [Authorize(Roles = "Reporting,Anketor")]
         [HttpGet]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(typeof(IEnumerable<UserListDto>), 200)]
@@ -84,7 +84,7 @@ namespace Auth.Api.Controllers
         /// </summary>
         /// <response code="200">Başarılı Listeleme</response>
         /// <response code="400">Eksik olan Fieldlar</response>
-        [Authorize]
+        [Authorize(Roles = "Reporting,Anketor")]
         [HttpGet("UserNames")]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
         [ProducesResponseType(typeof(IEnumerable<UserNameDto>), 200)]

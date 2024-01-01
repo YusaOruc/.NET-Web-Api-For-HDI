@@ -24,13 +24,6 @@ namespace Auth.Api.Controllers
 
             return Ok(new { Message = "Logout successful." });
         }
-        [HttpPost("test")]
-        [Authorize] // Sadece oturum açmış kullanıcılar için
-        public async Task<string> Test()
-        {
-            var a = "Test";
-            return a;
-        }
         [HttpPost("login")]
         public async Task<LoginResultDto> Login(string username, string password)
         {
